@@ -42,6 +42,40 @@ def update_timer_label():
         timer_label.config(text=f"⏱️ TIME: {elapsed}s")
         root.after(1000, update_timer_label)
 
+def reveal_cells(r, c):
+    btn = buttons_grid[r][c]
+    if btn["state"] == "disabled":
+        return
+    value = backend_board[r][c]
+    btn.config(bg="#313244", state="disabled")
+    if value > 0:
+        colors = [
+            "",
+            "#89b4fa",
+            "#a6e3a1",
+            "#f38ba8",
+            "#cba6f7",
+            "#fab387",
+            "#74c7ec",
+            "#94e2d5",
+            "#f9e2af"
+        ]
+        btn.config(
+            text=str(value),
+            fg=colors[value],
+            disabledforeground=colors[value],
+            font=("Helvetica", 12, "bold")
+        )
+        return
+    btn.config(
+        text="·",
+        fg="#6c7086",
+        disabledforeground="#6c7086"
+    )
+    for nr, nc in logic.get_neighbors(r, c):
+        reveal_cells(nr, nc)
+
+
 def on_click(r, c):
     global score_counter, game_active
     player = player_name.get().strip()
@@ -75,12 +109,7 @@ def on_click(r, c):
         # Safe tile revealed
         score_counter += 10
         score_label.config(text=f"⭐ SCORE: {score_counter}")
-        
-        if value == 0:
-            btn.config(text="", bg="#313244", state="disabled")
-        else:
-            colors = ["", "#89b4fa", "#a6e3a1", "#f38ba8", "#cba6f7", "#fab387", "#74c7ec", "#94e2d5", "#f9e2af"]
-            btn.config(text=str(value), bg="#313244", fg=colors[value], disabledforeground=colors[value], font=("Helvetica", 12, "bold"), state="disabled")
+        reveal_cells(r, c)
         
         # Check Win Condition
         opened_tiles = 0
