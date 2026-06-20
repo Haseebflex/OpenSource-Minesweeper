@@ -31,4 +31,39 @@ def create_board():
                         board[r][c] += 1
                        
     return board
+def get_neighbors(r, c):
+neighbors = []
+
+for dr in [-1, 0, 1]:
+for dc in [-1, 0, 1]:
+
+if dr == 0 and dc == 0:
+continue
+
+nr = r + dr
+nc = c + dc
+
+if 0 <= nr < ROWS and 0 <= nc < COLS:
+neighbors.append((nr, nc))
+
+return neighbors
+
+def get_neighbors(r, c):
+neighbors = []
+
+for dr in [-1, 0, 1]:
+for dc in [-1, 0, 1]:
+
+if dr == 0 and dc == 0:
+continue
+
+nr = r + dr
+nc = c + dc
+
+if 0 <= nr < ROWS and 0 <= nc < COLS:
+neighbors.append((nr, nc))
+
+return neighbors
+
+
 
